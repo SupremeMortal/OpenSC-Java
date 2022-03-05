@@ -1,10 +1,6 @@
 package test.org.opensc.pkcs15;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.security.cert.CertificateParsingException;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -149,8 +145,10 @@ public class TestSoftwareToken extends TestCase {
         PathHelper.selectDF(token,new TokenPath(app.getApplicationTemplate().getPath()));
         
         token.selectEF(0x5031);
-        
-        PKCS15Objects objs = PKCS15Objects.readInstance(token.readEFData(),new TokenContext(token));
+
+        InputStream stream = token.readEFData();
+        PKCS15Objects objs = PKCS15Objects.readInstance(stream, new TokenContext(token));
+        stream.close();
         
         assertNotNull(objs.getAuthObjects());
         assertNotNull(objs.getPrivateKeys());
@@ -207,9 +205,10 @@ public class TestSoftwareToken extends TestCase {
         PathHelper.selectDF(token,new TokenPath(app.getApplicationTemplate().getPath()));
         
         token.selectEF(0x5032);
-        
+
         ASN1InputStream ais = new ASN1InputStream(token.readEFData());
         TokenInfo tokenInfo = TokenInfo.getInstance(ais.readObject());
+        ais.close();
         
         ASN1OutputStream aos = new ASN1OutputStream(token.writeEFData());
         aos.writeObject(tokenInfo);

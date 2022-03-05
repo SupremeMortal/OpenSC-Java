@@ -57,15 +57,21 @@ public class StreamResolverDirectory<ReferenceType extends DEREncodable, EntityT
      */
     @Override
     public EntityType resolveReference(ReferenceType ref) {
-       
+
+        ASN1InputStream ais = null;
         try {
-            
-            ASN1InputStream ais = new ASN1InputStream(this.streamResolver.readReference(ref));
+            ais = new ASN1InputStream(this.streamResolver.readReference(ref));
             
             return this.instanceFactory.getInstance(ais.readObject());
-            
         } catch (IOException e) {
             throw new IllegalArgumentException("Reference ["+ref+"] cannot be read.",e);
+        } finally {
+            if (ais != null) {
+                try {
+                    ais.close();
+                } catch (IOException ignored) {
+                }
+            }
         }
     }
     
@@ -74,7 +80,7 @@ public class StreamResolverDirectory<ReferenceType extends DEREncodable, EntityT
      */
     @Override
     public void updateEntity(ReferenceType ref, EntityType entity) {
-        
+
         try {
             ASN1OutputStream aos = new ASN1OutputStream(this.streamResolver.writeReference(ref));
         

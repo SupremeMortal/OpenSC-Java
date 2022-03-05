@@ -68,6 +68,8 @@ public class TokenContext implements Context {
             
             is.skip(ref.getIndex().intValue());
             int n = is.read(ba);
+
+            is.close();
             
             return new ByteArrayInputStream(ba,0,n);
         }

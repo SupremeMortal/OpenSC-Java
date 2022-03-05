@@ -110,21 +110,22 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
             else
                 throw e;
         }
+
+        ISO7816Applications apps;
         
         InputStream is = token.readEFData();
-        
         ASN1InputStream ais = new ASN1InputStream(is);
-        
-        ISO7816Applications apps = new ISO7816Applications();
-        
-        ISO7816ApplicationTemplate template;
-        
-        while ((template=ISO7816ApplicationTemplate.getInstance(ais.readObject())) != null)
-        {
-            apps.addApplication(template);
+        try {
+            apps = new ISO7816Applications();
+
+            ISO7816ApplicationTemplate template;
+
+            while ((template = ISO7816ApplicationTemplate.getInstance(ais.readObject())) != null) {
+                apps.addApplication(template);
+            }
+        } finally {
+            ais.close();
         }
-         
-        ais.close();
         
         return apps;
     }
