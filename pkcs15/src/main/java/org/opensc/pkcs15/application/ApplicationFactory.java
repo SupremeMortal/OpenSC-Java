@@ -24,8 +24,7 @@ package org.opensc.pkcs15.application;
 
 import java.io.IOException;
 import java.util.List;
-
-import javax.imageio.spi.ServiceRegistry;
+import java.util.ServiceLoader;
 
 import org.opensc.pkcs15.token.Token;
 
@@ -40,11 +39,11 @@ public abstract class ApplicationFactory {
      * @return The first instance registered under the resource path
      *         <code>META-INF/serivces/org.opensc.pkcs15.application.ApplicationFactory</code>.
      *         
-     * @see ServiceRegistry#lookupProviders(Class)
+     * @see ServiceLoader#load(Class)
      */
     public static ApplicationFactory newInstance()
     {
-        return ServiceRegistry.lookupProviders(ApplicationFactory.class).next();
+        return ServiceLoader.load(ApplicationFactory.class).iterator().next();
     }
  
     /**

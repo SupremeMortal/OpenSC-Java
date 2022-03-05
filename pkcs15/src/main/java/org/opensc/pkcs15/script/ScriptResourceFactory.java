@@ -23,11 +23,10 @@
 package org.opensc.pkcs15.script;
 
 import java.io.IOException;
-
-import javax.imageio.spi.ServiceRegistry;
+import java.util.ServiceLoader;
 
 /**
- * A scipt resource factory.
+ * A script resource factory.
  * 
  * @author wglas
  */
@@ -39,7 +38,7 @@ public abstract class ScriptResourceFactory {
      */
     static public ScriptResourceFactory getInstance() {
         
-        return ServiceRegistry.lookupProviders(ScriptResourceFactory.class).next();
+        return ServiceLoader.load(ScriptResourceFactory.class).iterator().next();
     }
     
     /**

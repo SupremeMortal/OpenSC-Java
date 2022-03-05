@@ -22,10 +22,10 @@
 
 package org.opensc.pkcs15.script;
 
-import javax.imageio.spi.ServiceRegistry;
+import java.util.ServiceLoader;
 
 /**
- * A scipt resource factory.
+ * A script resource factory.
  * 
  * @author wglas
  */
@@ -37,7 +37,7 @@ public abstract class ScriptParserFactory {
      */
     static public ScriptParserFactory getInstance() {
         
-        return ServiceRegistry.lookupProviders(ScriptParserFactory.class).next();
+        return ServiceLoader.load(ScriptParserFactory.class).iterator().next();
     }
     
     /**

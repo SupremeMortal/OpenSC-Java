@@ -24,8 +24,7 @@ package org.opensc.pkcs15.token;
 
 import java.io.File;
 import java.io.IOException;
-
-import javax.imageio.spi.ServiceRegistry;
+import java.util.ServiceLoader;
 import javax.smartcardio.Card;
 
 /**
@@ -39,11 +38,11 @@ public abstract class TokenFactory {
      * @return The first instance registered under the resource path
      *         <code>META-INF/serivces/org.opensc.pkcs15.token.TokenFactory</code>.
      *         
-     * @see ServiceRegistry#lookupProviders(Class)
+     * @see ServiceLoader#load(Class)
      */
     public static TokenFactory newInstance()
     {
-        return ServiceRegistry.lookupProviders(TokenFactory.class).next();
+        return ServiceLoader.load(TokenFactory.class).iterator().next();
     }
  
     /**
